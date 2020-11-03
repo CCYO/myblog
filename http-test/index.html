@@ -38,7 +38,7 @@
     }
     
     const get = (api) => {
-      $.get({
+      return $.get({
         url: api,
         dataType: 'json',
         context: $('#showBlogList')
