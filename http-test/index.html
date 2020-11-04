@@ -38,10 +38,7 @@
     }
     
     const get = (api) => {
-      return $.get({
-        url: api,
-        context: $('#showBlogList')
-      })
+      return $.get(api)
     }
     
     const query = getQuery()
@@ -55,7 +52,7 @@
     .then(result => {
       let data = result.data
       data.forEach( item => {
-        $(this).append(`
+        $('#showBlogList').append(`
           <div>
             <p>${item.title}</p>
             <p>${item.createtime}</p>
