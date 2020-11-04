@@ -40,7 +40,6 @@
     const get = (api) => {
       return $.get({
         url: api,
-        dataType: 'json',
         context: $('#showBlogList')
       })
     }
@@ -58,9 +57,9 @@
       data.forEach( item => {
         $(this).append($(`
           <div>
-            <p>item.title</p>
-            <p>item.createtime</p>
-            <p>item.author</p>
+            <p>${item.title}</p>
+            <p>${item.createtime}</p>
+            <p>${item.author}</p>
           </div>
         `))
       })
