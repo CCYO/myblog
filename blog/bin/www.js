@@ -1,5 +1,5 @@
 const http = require('http'),
-      PORT = 8000;
+      PORT = (process.env.PORT)? process.env.PORT : 8000;
 
 const serverHandle = require('../app')
 
