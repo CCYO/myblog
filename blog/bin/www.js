@@ -6,5 +6,5 @@ const serverHandle = require('../app')
 const server = http.createServer(serverHandle)
 
 server.listen(PORT, ()=>{
-    console.log("listen OK")
+    console.log(`NodeJS在後台 listen ${PORT} OK`)
 })
