@@ -55,13 +55,13 @@
     .then(result => {
       let data = result.data
       data.forEach( item => {
-        $(this).append($(`
+        $(this).append(`
           <div>
             <p>${item.title}</p>
             <p>${item.createtime}</p>
             <p>${item.author}</p>
           </div>
-        `))
+        `)
       })
     })
     
