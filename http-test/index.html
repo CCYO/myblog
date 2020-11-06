@@ -61,7 +61,7 @@
         })
         let html = data.map( item =>
             `<div>
-                <p><a href="/blog.html?key=${item.title}">${item.title}</a></p>
+                <p><a href="/detail.html?id=${item.id}">${item.title}</a></p>
                 <p>發佈於${item.createtime}</p>
                 <p>作者：<a href="/index.html?author=${item.author}">${item.author}</a></p>
             </div>`
