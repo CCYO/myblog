@@ -45,7 +45,7 @@
     //api
     let api = '/api/blog/list'
     if(query && query['author']){
-      getUrl += `?author=${query['author']}`
+      api += `?author=${query['author']}`
     }
     
     get(api)
