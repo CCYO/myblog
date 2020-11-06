@@ -50,25 +50,27 @@
     
     get(api)
     .then(result => {
-        if(!result.errno){
+        if(result.errno){
             $('#showBlogList').append(`沒有文章`)
             return
         }
         let data = result.data
-        const overOneAuthor = data.some((item,indexm,arr) => {
-            return item.author !== arr[index-1].author
+        const overOneAuthor = data.some((item,index,arr) => {
+	    if(!index)return
+            return item.author !== arr[index - 1].author
         })
-        let html = data.map( item => {
+        let html = data.map( item =>
             `<div>
                 <p><a href="/blog.html?key=${item.title}">${item.title}</a></p>
                 <p>發佈於${item.createtime}</p>
                 <p>作者：<a href="/index.html?author=${item.author}">${item.author}</a></p>
             </div>`
-        })
+        )
         if(!overOneAuthor){
             html.push(`<div><a href="/index.html">顯示所有文章</a><div>`)
         }
-        $('#showBlogList').append(html)
+	console.log(html)
+        $('#showBlogList').append(...html)
         return 
     })
     
