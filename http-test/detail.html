@@ -42,7 +42,7 @@
             $('#showBlogDetail').append(`發生錯誤，找不到文章`)
             return
         }
-        let data = result.data[0]
+        let data = result.data
 
         $(document).attr("title",　data.title);
 
@@ -52,6 +52,7 @@
                 <p>發佈於${data.createtime}</p>
                 <p>作者：<a href="/index.html?author=${data.author}">${data.author}</a></p>
                 <p>${data.content}</p>
+		<a href="/index.html">回到文章列表</a>
             </div>`            
         )
         return 
