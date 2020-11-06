@@ -54,9 +54,9 @@
       data.forEach( item => {
         $('#showBlogList').append(`
           <div>
-            <p>${item.title}</p>
-            <p>${item.createtime}</p>
-            <p>${item.author}</p>
+            <p><a href="/blog.html?key=${item.title}">${item.title}</a></p>
+            <p>發佈於${item.createtime}</p>
+            <p>作者：<a href="/index.html?author=${item.author}">${item.author}</a></p>
           </div>
         `)
       })
