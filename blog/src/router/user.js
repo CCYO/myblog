@@ -18,9 +18,9 @@ const handleUserRouter = (req, res) => {
                         realname: data.realname
                     }
                 )
-                return new SuccessModel('登入成功')
+                return Promise.resolve(new SuccessModel('登入成功'))
             }
-            return new ErrorModel('登入失敗')
+            return Promise.resolve(new ErrorModel('登入失敗'))
         })
     }
 }

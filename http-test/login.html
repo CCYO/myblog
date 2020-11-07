@@ -30,39 +30,11 @@
       })
     }
 
-    $("#submit").click(()=>{
-        login()
-    })
-
-
-    get(api)
-    .then(result => {
-        if(result.errno){
-            $('#showBlogList').append(`沒有文章`)
-            return
-        }
-        let data = result.data
-        const overOneusername = data.some((item,index,arr) => {
-	    if(!index)return
-            return item.username !== arr[index - 1].username
+    $("#submit").click(
+        login.then(result => {
+            console.log(result.data)
         })
-        let html = data.map( item =>
-            `<div>
-                <p><a href="/detail.html?id=${item.id}">${item.title}</a></p>
-                <p>發佈於${item.createtime}</p>
-                <p>作者：<a href="/index.html?username=${item.username}">${item.username}</a></p>
-            </div>`
-        )
-        if(!overOneusername){
-            html.push(`<div><a href="/index.html">顯示所有文章</a><div>`)
-        }
-	console.log(html)
-        $('#showBlogList').append(...html)
-        return 
-    })
-    
-    
-    
+    )    
 
   </script>
 </body>
