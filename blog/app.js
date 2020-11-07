@@ -1,10 +1,14 @@
 const querystring = require('querystring')
-const handleBlogRouter = require('./src/router/blog'),
-      handleUserRouter = require('./src/router/user')
+const handleBlogRouter = require('./src/router/blog')
+const handleUserRouter = require('./src/router/user')
 
-const SESSION_DATA = {
+const {get, set} = require('./db/redis.js')
 
-}
+
+//↓應該用不到，用redis取代
+//const SESSION_DATA = {
+//
+//}
 
 const getCookieExpires = () => {
     const d = new Date()
@@ -62,19 +66,13 @@ const serverHandle = (req, res) => {
         req.cookie[key] = val
     })
 
-    //解析session
+    //需不需要設定cookie
     let needSetCookie = false
-    let userId = req.cookie.userId
-    if(userId){
-        if(!SESSION_DATA[userId]){
-            SESSION_DATA[userId] = {}
-        }
-    }else{
+    if(!req.cookie.userId){
         needSetCookie = true
-        userId = `${Date.now()}_${Math.random()}`
-        SESSION_DATA[userId] = {}
+        let userId = `${Date.now()}_${Math.random()}`
+        req.cookie.userId = userId
     }
-    req.session = SESSION_DATA[userId]
 
 
 
