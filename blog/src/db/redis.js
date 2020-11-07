@@ -5,7 +5,9 @@ const redisClient = redis.createClient(REDIS_CONF.port, REDIS_CONF.host)
 redisClient.on('error', err => {
     console.error(err)
 })
-
+redisClient.on('connect', err => {
+    console.log('REDIS 已連接')
+})
 function set(key, val){
     if(typeof val === "object"){
         val = JSON.stringify(val)
