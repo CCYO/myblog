@@ -18,14 +18,18 @@ const getCookieExpires = () => {
 
 const getPostData = (req) => {
     const promise = new Promise((resolve, reject) => {
-        if(req.method !== "POST"){
+        console.log('req.contentType: >' + req.headers['content-type'])
+	if(req.method !== "POST"){
+	    console.log('app.js----req is not POST')
             return resolve({})
         }
-        if(req.headers['content-type'] !== 'application/json'){
+        if(req.headers['content-type'] !== 'application/json; charset=UTF-8'){
+	    console.log('app.js----req is not application/json------IS: ' + req.headers['content-type'])
             return resolve({})
         }
         let postData = ''
         req.on('data', (chunk) => {
+	    console.log('app.js----req sent data...')
             postData += chunk.toString()
         })
         req.on('end', () => {
@@ -68,12 +72,12 @@ const serverHandle = (req, res) => {
 
     //需不需要設定cookie
     let needSetCookie = false
-    if(!req.cookie.userId){
+    let userId = req.cookie.userId
+    if(!userId){
         needSetCookie = true
-        let userId = `${Date.now()}_${Math.random()}`
+        userId = `${Date.now()}_${Math.random()}`
         req.cookie.userId = userId
     }
-
 
 
     //處理post data

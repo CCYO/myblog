@@ -1,6 +1,7 @@
 const { login } = require('../controller/user')
 const { SuccessModel, ErrorModel } = require('../model/resModel')
 
+const {get, set} = require('../db/redis.js')
 
 
 const handleUserRouter = (req, res) => {
@@ -11,6 +12,8 @@ const handleUserRouter = (req, res) => {
         //const {username, password } = req.query
         const result = login(username, password)
         return result.then( data => {
+	    console.log('取到user資料: ' , data)
+	    console.log('req.cookie.userId: ', req.cookie.userId)
             if(data.username){
                 set(req.cookie.userId,
                     {
@@ -18,9 +21,9 @@ const handleUserRouter = (req, res) => {
                         realname: data.realname
                     }
                 )
-                return Promise.resolve(new SuccessModel('登入成功'))
+                return new SuccessModel(data)
             }
-            return Promise.resolve(new ErrorModel('登入失敗'))
+            return new ErrorModel('登入失敗')
         })
     }
 }

@@ -24,17 +24,22 @@
     
     
     const login = () => {
-      return $.post('/api/user/login', {
-          username: $('#username').val(),
-          password: $('#password').val()
+      return $.ajax('/api/user/login', {
+	  url: '/api/user/login',
+	  method: 'POST',
+	  data: JSON.stringify({
+		username: 'lisi', //$('#username').val(),
+		password: 123     //$('#password').val()
+		}),
+	  contentType: 'application/json; charset=utf-8'
       })
     }
 
-    $("#submit").click(
-        login.then(result => {
+    $("#submit").click(()=>{
+        login().then(result => {
             console.log(result.data)
         })
-    )    
+    })    
 
   </script>
 </body>
