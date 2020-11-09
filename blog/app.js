@@ -70,13 +70,14 @@ const serverHandle = (req, res) => {
         req.cookie[key] = val
     })
 
+    //設定session
     //需不需要設定cookie
     let needSetCookie = false
-    let userId = req.cookie.userId
-    if(!userId){
+    let sessionId = req.cookie.userId
+    if(!sessionId){
         needSetCookie = true
-        userId = `${Date.now()}_${Math.random()}`
-        req.cookie.userId = userId
+        sessionId = `${Date.now()}_${Math.random()}`
+        req.sessionId = sessionId
     }
 
 
@@ -89,7 +90,7 @@ const serverHandle = (req, res) => {
         if(blogResult){
             blogResult.then(blogData => {
                 if(needSetCookie){
-                    res.setHeader('Set-Cookie', `userId=${userId};path=/; httpOnly; expires=${getCookieExpires()}`)
+                    res.setHeader('Set-Cookie', `userId=${sessionId};path=/; httpOnly; expires=${getCookieExpires()}`)
                 }
                 res.end(JSON.stringify(blogData))
             })
@@ -101,7 +102,7 @@ const serverHandle = (req, res) => {
         if(userResult){
             userResult.then(userData => {
                if(needSetCookie){
-                    res.setHeader('Set-Cookie', `userId=${userId};path=/; httpOnly; expires=${getCookieExpires()}`)
+                    res.setHeader('Set-Cookie', `userId=${sessionId};path=/; httpOnly; expires=${getCookieExpires()}`)
                 }
                 res.end(JSON.stringify(userData))
             })

@@ -12,15 +12,12 @@ const handleUserRouter = (req, res) => {
         //const {username, password } = req.query
         const result = login(username, password)
         return result.then( data => {
-	    console.log('取到user資料: ' , data)
-	    console.log('req.cookie.userId: ', req.cookie.userId)
             if(data.username){
-                set(req.cookie.userId,
-                    {
-                        username: data.username,
-                        realname: data.realname
-                    }
-                )
+                req.session = {
+                    username: data.username,
+                    realname: data.realname
+                }
+                set(req.sessionId, req.session)
                 return new SuccessModel(data)
             }
             return new ErrorModel('登入失敗')
