@@ -2,7 +2,7 @@ const querystring = require('querystring')
 const handleBlogRouter = require('./src/router/blog')
 const handleUserRouter = require('./src/router/user')
 
-const {get, set} = require('./db/redis.js')
+const {get, set} = require('./src/db/redis.js')
 
 
 //↓應該用不到，用redis取代
