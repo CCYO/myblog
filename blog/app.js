@@ -77,14 +77,11 @@ const serverHandle = (req, res) => {
     if(!sessionId){
         needSetCookie = true
         sessionId = `${Date.now()}_${Math.random()}`
-        req.sessionId = sessionId
     }
-
-
+    req.sessionId = sessionId
     //處理post data
     getPostData(req).then(postData => {
         req.body = postData
-
         //處理 blog路由
         const blogResult = handleBlogRouter(req, res)
         if(blogResult){
@@ -117,3 +114,4 @@ const serverHandle = (req, res) => {
 }
 
 module.exports = serverHandle
+

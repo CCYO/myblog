@@ -6,17 +6,19 @@ const con = mysql.createConnection(MYSQL_CONF)
 
 con.connect((error) => {
     if(error){
-        console.error('SQL連結錯誤,原因是', error)
+        console.error('SQL / 連結錯誤 / 原因 >>> ', error)
         return
     }
-    console.log('成功連結')
+    console.log('SQL / 連結成功')
     return
 })
 
 const exec = (sql) => {
     const promise = new Promise((resolve, reject) => {
         con.query(sql, (err, result) => {
-            if(err){ return reject(err)}
+            if(err){ 
+              return reject({dbErrNo: '111', dbErrMsg: err})	
+            }
             return resolve(result)
         })
     })
