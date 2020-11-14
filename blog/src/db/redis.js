@@ -1,5 +1,20 @@
-const redis = require("redis");
-const { REDIS_CONF } = require("../conf/db");
+const redis = require('redis')
+const { REDIS_CONF } = require('../conf/db')
+
+const redisClient = redis.createClient(REDIS_CONF.port, REDIS_CONF.host)
+redisClient.on('error', err => {
+    console.error(err)
+})
+redisClient.on('connect', err => {
+    console.log('REDIS 已連接')
+})
+
+const set = (key, val) => {
+    if(typeof val === "object"){
+        val = JSON.stringify(val)
+    }
+    redisClient.set(key, val, redis.print)
+}
 
 const redisClient = redis.createClient(REDIS_CONF);
 redisClient.on("error", (err) => {
@@ -8,9 +23,8 @@ redisClient.on("error", (err) => {
 redisClient.on("connect", (err) => {
   console.log("REDIS / 連接成功");
 });
+
 function set(key, val) {
-console.log('k: ', key)
-console.log('v: ', val)
   let _val = val
   if (typeof _val === "object") {
 	console.log('stringify ing...')
@@ -27,28 +41,27 @@ console.log('v: ', val)
   })
 }
 
-function get(key) {
-  const promise = new Promise((resolve, reject) => {
+const get = (key) => {
+  return new Promise((resolve, reject) => {
+    if(!key) return resolve({})
     redisClient.get(key, (err, val) => {
-      if (err) {
-        reject(err);
-        return;
+      if(err){
+        reject(err)
+        return
       }
-      if (val === null) {
-        resolve(null);
+      if(val === null){
+        resolve({})
+        return 
       }
-      try {
-        resolve(JSON.parse(val));
-      } catch (ex) {
-        resolve(val);
+      try{
+        resolve(JSON.parse(val))
+      }catch(ex){
+        resolve(val)
       }
-    });
-  });
-  return promise;
+    })
+  })
 }
 
 module.exports = {
-  set,
-  get
-};
-
+    set, get
+}
