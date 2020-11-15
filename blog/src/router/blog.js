@@ -5,7 +5,6 @@ const loginCheck = (req) => {
     if(!req.session.username){
         return Promise.resolve(new ErrorModel('尚未登錄'))
     }
-
 }
 
 const handleBlogRouter = (req, res) => {
@@ -26,6 +25,10 @@ const handleBlogRouter = (req, res) => {
     }
 
   if(method === "GET" && req.path === "/api/blog/list"){
+      if(req.query.admin){
+        loginCheck(req)
+        return getList(req.session.username).then(listData => {console.log('listData: ', String(listData));return new SuccessModel(listData)})
+      }
       const author = req.query.author || ''
       const keyword = req.query.keyword || ''
       const result = getList(author, keyword)

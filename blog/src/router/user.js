@@ -9,9 +9,10 @@ const handleUserRouter = (req, res) => {
     //if(req.method === "GET" && req.path === "/api/user/login"){
     const { username, password } = req.body;
     //const {username, password } = req.query
-console.log('req.sessionId: ', req.sessionId)    
+console.log('req.cookie.userId: ', req.cookie.userId)    
+console.log('api==, ',username, password)
     return login(username, password)
-    .then(data => set(req.sessionId, data))
+    .then(data => set(req.cookie.userId, data))
     .then(data => {
       req.session = data
 	console.log('data: ', data)

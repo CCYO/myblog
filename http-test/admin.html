@@ -8,58 +8,33 @@
 </head>
 
 <body>
-    <div>
+    <div id='showBlogList'>
   </div>
   <script>
-    //取得url、path、query
-    const getQuery = () => {
-      const url = location.href
-      if(!url.split('?')[1]) return
-      const query = url.split('?')[1].split('#')[0]
-      const queryArr = query.split('&')
-      let paraObj = {}
-      queryArr.forEach(item => {
-        let key = item.split('=')[0]
-        let val = item.split('=')[1]
-        paraObj[key] = val
-      })
-      return paraObj
-    }
-    
     const get = (api) => {
       return $.get(api)
     }
     
-    const query = getQuery()
     //api
-    let api = '/api/blog/list'
-    if(query && query['author']){
-      api += `?author=${query['author']}`
-    }
+    let api = '/api/blog/list?admin=1'
     
     get(api)
     .then(result => {
         if(result.errno){
-            $('#showBlogList').append(`沒有文章`)
+            $('#showBlogList').append(`you have to login`)
             return
         }
         let data = result.data
-        const overOneAuthor = data.some((item,index,arr) => {
-	    if(!index)return
-            return item.author !== arr[index - 1].author
-        })
+alert(data)
         let html = data.map( item =>
             `<div>
-                <p><a href="/detail.html?id=${item.id}">${item.title}</a></p>
-                <p>發佈於${item.createtime}</p>
-                <p>作者：<a href="/index.html?author=${item.author}">${item.author}</a></p>
+                <a href="/detail.html?id=${item.id}">${item.title}</a>|
+                <span>${item.createtime}</p>
+                <a href="/api/blog/updateBlog">update</a>|<a href="/api/blog/delBlog">delete</a>
             </div>`
         )
-        if(!overOneAuthor){
-            html.push(`<div><a href="/index.html">顯示所有文章</a><div>`)
-        }
-	console.log(html)
-        $('#showBlogList').append(...html)
+        html.unshift(`<div>Welcome!${data[0].author}~</div>`)        
+$('#showBlogList').append(...html)
         return 
     })
     

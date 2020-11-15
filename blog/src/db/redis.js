@@ -1,21 +1,6 @@
 const redis = require('redis')
 const { REDIS_CONF } = require('../conf/db')
 
-const redisClient = redis.createClient(REDIS_CONF.port, REDIS_CONF.host)
-redisClient.on('error', err => {
-    console.error(err)
-})
-redisClient.on('connect', err => {
-    console.log('REDIS 已連接')
-})
-
-const set = (key, val) => {
-    if(typeof val === "object"){
-        val = JSON.stringify(val)
-    }
-    redisClient.set(key, val, redis.print)
-}
-
 const redisClient = redis.createClient(REDIS_CONF);
 redisClient.on("error", (err) => {
   console.error("REDIS / 連結錯誤 / 原因 >>> ", error);

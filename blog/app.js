@@ -1,7 +1,7 @@
 const querystring = require("querystring");
 const handleBlogRouter = require("./src/router/blog"),
       handleUserRouter = require("./src/router/user"),
-      { set } = require("./src/db/redis.js");
+      { get } = require("./src/db/redis.js");
 
 const getCookieExpires = () => {
   const d = new Date();
@@ -13,9 +13,11 @@ const getCookieExpires = () => {
 const getPostData = (req) => {
   return new Promise((resolve, reject) => {
     if (req.method !== "POST") {
+      console.log('method: ', req.method)
       return resolve({});
     }
-    if (req.headers["content-type"] !== "application/json") {
+    if (req.headers["content-type"] !== "application/json; charset=UTF-8") {
+      console.log('type: ', req.headers['content-type'])
       return resolve({});
     }
     
@@ -25,8 +27,10 @@ const getPostData = (req) => {
     });
     req.on("end", () => {
       if (!postData) {
+        console.log('postData: ',postData)
         return resolve({});
       }
+      console.log('end: ', postData)
       resolve(JSON.parse(postData));
     });
   });
@@ -71,6 +75,7 @@ const serverHandle = (req, res) => {
   
   Promise.all([getPostData(req), getSession(req.cookie.userId)])
     .then((resultArr) => {
+      console.log('app== ,', resultArr[0], resultArr[1])
       req.body = resultArr[0];
       req.session = resultArr[1];
     
