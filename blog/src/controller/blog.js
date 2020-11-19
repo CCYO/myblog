@@ -35,9 +35,6 @@ const newBlog = (blogData = {}) => {
             id: insertData.insertId
         }
     })
-    return {
-        id: 3
-    }
 }
 
 const updateBlog = (id, blogData = {}) => {
