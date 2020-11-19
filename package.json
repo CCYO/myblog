@@ -5,7 +5,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "cross-env NODE_ENV=production PORT node bin/www.js",
-    "go": "cross-env NODE_ENV=dev PORT=8000 node blog/bin/www.js & npx http-server ./http-test -p 8080"
+    "go": "cross-env NODE_ENV=dev PORT=8080 node blog/bin/www.js & npx http-server ./http-test -p 8000"
   },
   "keywords": [],
   "author": "",

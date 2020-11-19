@@ -2,7 +2,7 @@ const redis = require('redis')
 const { REDIS_CONF } = require('../conf/db')
 
 const redisClient = redis.createClient(REDIS_CONF);
-redisClient.on("error", (err) => {
+redisClient.on("error", (error) => {
   console.error("REDIS / 連結錯誤 / 原因 >>> ", error);
 });
 redisClient.on("connect", (err) => {
