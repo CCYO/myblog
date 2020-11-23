@@ -8,26 +8,17 @@ const loginCheck = (req) => {
 }
 
 const handleBlogRouter = (req, res) => {
-    const method = req.method
-    const id = req.query.id
 
-    function checkLogin(){
-        get()
-        .then(val => {
-            if(val && typeof val === 'object'){
-                req.session = val
-            }
-            else {
-                console.log(`REDIS回傳一段訊息: ${val}`)
-            }
-            return
-        })
-    }
+  const method = req.method
+  const id = req.query.id
 
   if(method === "GET" && req.path === "/api/blog/list"){
       if(req.query.admin){
-        loginCheck(req)
-        return getList(req.session.username).then(listData => {console.log('listData: ', String(listData));return new SuccessModel(listData)})
+        const loginCheckResult =  loginCheck(req)
+        if(loginCheckResult){
+	  return loginCheckResult
+        }
+        return getList(req.session.username).then(listData => new SuccessModel(listData))
       }
       const author = req.query.author || ''
       const keyword = req.query.keyword || ''
