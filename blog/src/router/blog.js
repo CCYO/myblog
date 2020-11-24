@@ -44,18 +44,23 @@ const handleBlogRouter = (req, res) => {
     }
       req.body.author = req.session.username
       const result = newBlog(req.body)
-      return result.then(data => {
-          return new SuccessModel(data)
-      })
+      return result
+		.then(data => {
+			return new SuccessModel(data)
+		})
+		.catch(errResult => {
+			console.log(`報錯,dbErrNo >>> ${errResult.dbErrNo}, dbErrMsg >>> ${errResult.dbErrMsg}`)
+			return new ErrorModel(errResult)
+		})
   }
-   
 
-    if(method === "POST" && req.path === "/api/blog/update"){
+  if(method === "POST" && req.path === "/api/blog/update"){
         const loginCheckResult = loginCheck(req)  
         if(loginCheckResult){
             return loginCheckResult
         }
-        const result = updateBlog(id, req.body)
+	
+        const result = updateBlog(req.query.id, req.body)
         return result.then(val => {
             if(val){
                 return new SuccessModel()

@@ -8,24 +8,15 @@
 </head>
 
 <body>
- 
-  <div id="title">
-    首頁
-  </div>
   <div>
-    <h2>查詢文章列表</h2>
-    <label for="author">
-      帳號：<input id="author" name="author" type="name"></label>
-    <label for="password">
-      密碼：<input id="password" name="password" type="name"></label>
-    <button id="go">送出查詢</button>
-    <div id="showBlogList"></div>
+    <h2>文章列表</h2>
+    <div id='showBlogList'></div>
   </div>
   <script>
     //取得url、path、query
     const getQuery = () => {
       const url = location.href
-      if(!url.split('?')[1]) return
+      if(!url.split('?')[1]) return {}
       const query = url.split('?')[1].split('#')[0]
       const queryArr = query.split('&')
       let paraObj = {}
@@ -40,12 +31,20 @@
     const get = (api) => {
       return $.get(api)
     }
-    
+    //轉換轉換createTime時間格式
+    const getTime = (msec) => {
+	return new Date(msec).toLocaleString()
+    }
+
     const query = getQuery()
     //api
     let api = '/api/blog/list'
-    if(query && query['author']){
+    let html = []
+    //判斷是否為單一作者文章列表
+    if(query['author']){
       api += `?author=${query['author']}`
+      //插入顯示所有文章按鈕
+      html.push(`<div><a href="/index.html">顯示所有文章</a><div>`)
     }
     
     get(api)
@@ -54,30 +53,22 @@
             $('#showBlogList').append(`沒有文章`)
             return
         }
-        let data = result.data
-        const overOneAuthor = data.some((item,index,arr) => {
-	    if(!index)return
-            return item.author !== arr[index - 1].author
-        })
-        let html = data.map( item =>
-            `<div>
+	let data = result.data
+        data.forEach( item =>
+            html.push(`<div>
                 <p><a href="/detail.html?id=${item.id}">${item.title}</a></p>
-                <p>發佈於${item.createtime}</p>
+                <p>發佈於${getTime(item.createtime)}</p>
                 <p>作者：<a href="/index.html?author=${item.author}">${item.author}</a></p>
-            </div>`
+            </div>`)
         )
-        if(!overOneAuthor){
-            html.push(`<div><a href="/index.html">顯示所有文章</a><div>`)
-        }
 	console.log(html)
         $('#showBlogList').append(...html)
         return 
     })
     
-    
-    
-
   </script>
 </body>
 
 </html>
+
+

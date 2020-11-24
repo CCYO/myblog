@@ -8,40 +8,41 @@
 </head>
 
 <body>
-    <div id='showBlogList'>
+  <div id='showBlogList'>
   </div>
   <script>
     const get = (api) => {
       return $.get(api)
     }
-    
     //api
     let api = '/api/blog/list?admin=1'
-    
+    const getTime = (msec) => {
+      return new Date(msec).toLocaleString()
+    }
     get(api)
-    .then(result => {
-        if(result.errno){
-            $('#showBlogList').append(`you have to login`)
-            return
+      .then(result => {
+        if (result.errno) {
+          $('#showBlogList').append(`you have to login`)
+          return
         }
         let data = result.data
-alert(data)
-        let html = data.map( item =>
-            `<div>
-                <a href="/detail.html?id=${item.id}">${item.title}</a>|
-                <span>${item.createtime}</p>
-                <a href="/api/blog/updateBlog">update</a>|<a href="/api/blog/delBlog">delete</a>
-            </div>`
+        let html = []
+        html.push(`<div>
+          <h2>Welcome!${data[0].author}~</h2>
+          <a href='/newBlog.html'>新增文章</a>
+        </div>`)
+        data.forEach(item =>
+	  html.push(`<div>
+            <a href="/detail.html?id=${item.id}">${item.title}</a>|
+            <span>${getTime(item.createtime)}</p>
+            <a href="/updateBlog.html?id=${item.id}">update</a>|<a href="/api/blog/delBlog?id=${item.id}'>delete</a>
+          </div>`)
         )
-        html.unshift(`<div>Welcome!${data[0].author}~</div>`)        
-$('#showBlogList').append(...html)
-        return 
-    })
-    
-    
-    
-
+        $('#showBlogList').append(...html)
+        return
+      })
   </script>
 </body>
 
 </html>
+

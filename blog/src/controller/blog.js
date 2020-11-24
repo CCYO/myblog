@@ -27,20 +27,36 @@ const newBlog = (blogData = {}) => {
     const author = blogData.author
           
     let sql = `
-        INSERT INTO blogs (title, content, createtime, author)                values('${title}', '${content}', ${createtime}, '${author}');
+        INSERT INTO blogs (title, content, createtime, author) values('${title}', '${content}', ${createtime}, '${author}');
     `
     return exec(sql).then( insertData => {
-        console.log('insertData: ', insertData)
-        return {
-            id: insertData.insertId
-        }
+	console.log('【router/blog.js:newBlog()】insertData >>> ', insertData)
+	return { id: insertData.id}
     })
 }
 
+
 const updateBlog = (id, blogData = {}) => {
-    console.log('UPDATE', id)
-    return true
+	const sql = `UPDATE blogs SET title='${blogData.title}', content='${blogData.content}', createtime=${blogData.createtime} where id='${id}';`
+	return exec(sql)
+		.then(updateData => {
+			let txt = ''
+			for(key in updateData){
+				txt += `${key} : ${updateData[key]} | `				
+			}
+			console.log(`【controller/blog.js:updateBlog()】updateData >>> ${txt}`)
+			console.log('----------------')
+			console.log('updateData.affectedRows: ', updateData.affectedRows)
+			return {id: updateData.id}
+		})
+		.catch(err => {
+			console.log('---------!!!!!!----------- ', err.dbErrMsg)
+			return err
+		})
 }
+
+
+
 
 const delBlog = (id) => {
     
