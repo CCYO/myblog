@@ -29,8 +29,6 @@
       .create(document.querySelector('#editor'))
       .then(editor => {
         editorEle = editor;
-        console.log('editor: ', editor);
-        console.log('editorEle: ', editorEle)
       })
       .catch(error => {
         console.error(error);
@@ -46,14 +44,17 @@
       }
       post(api, obj)
         .then(result => {
-          let data = result.data
-          //處理報錯資訊
+          //處理報錯
           if (result.erron) {
-            alert(`Sever Error,dbErrNo${errResult.dbErrNo} >>> ${errResult.dbErrMsg}`)
+            alert(`${result.msg} --- 請重新嘗試`)
+	    window.location.href = '/newBlog.html'
+	    return
           }
-          //處理成功資訊
-          alert(`Blog上傳成功`)
+          //處理成功
+	  console.log(result)
+          alert(result.msg)
           window.location.href = '/admin.html'
+	  return
         })
     })
   </script>

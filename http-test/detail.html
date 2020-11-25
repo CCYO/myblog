@@ -44,7 +44,8 @@
     get(api)
     .then(result => {
         if(result.errno){
-            $('#showBlogDetail').append(`發生錯誤，找不到文章`)
+            alert(result.msg)
+	    history.back()
             return
         }
         let data = result.data

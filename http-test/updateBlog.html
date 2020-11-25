@@ -46,7 +46,7 @@
         .catch(error => {
           return {
             errno: 1,
-            errMsg: error
+            msg: error
           }
         })
     }
@@ -55,12 +55,14 @@
       .then(resultArr => {
         //處理get文章數據失敗的狀況
         if (resultArr[0].errno) {
-          alert(`報錯,dbErrNo${resultArr[0].data.dbErrNo} >>> ${resultArr[0].data.dbErrMsg}`)
+          alert(resultArr[0].msg)
+	  window.location.href = '/admin.html'
           return
         }
         //處理創建CKeditor失敗的狀況
         if (resultArr[1].errno) {
-          alert(`報錯,errMsg >>> ${resultArr[1].errMsg}`)
+          alert(resultArr[1].msg)
+	  window.location.href = '/admin.html'
           return
         }
         let blogData = resultArr[0].data
@@ -68,6 +70,7 @@
         editor = resultArr[1]
         editor.setData(blogData.content)
       })
+
     const post = (api, obj) => {
       return $.ajax({
         url: api,
@@ -76,6 +79,7 @@
         contentType: 'application/json; charset=utf-8'
       })
     }
+
     $('#submit').click(() => {
       const content = editor.getData()
       const title = $('#blogTitle').val()
@@ -92,13 +96,6 @@
       }
       post(api, obj)
         .then(result => {
-          let data = result.data
-          //處理報錯資訊
-          if (result.erron) {
-            alert(`Server Error,dbErrNo${errResult.dbErrNo} >>> ${errResult.dbErrMsg}`)
-	    return
-          }
-          //處理成功資訊
           alert(`Blog更新成功`)
           window.location.href = '/admin.html'
           return

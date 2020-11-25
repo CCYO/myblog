@@ -12,12 +12,11 @@ redisClient.on("connect", (err) => {
 function set(key, val) {
   let _val = val
   if (typeof _val === "object") {
-	console.log('stringify ing...')
         _val = JSON.stringify(_val);
   }
   return new Promise((resolve, reject) => {
     redisClient.set(key, _val, (err, ok) => {
-      if(err){ return reject({dbErrNo: '211', dbErrMsg: `REDIS設值失敗,原因 >>> ${err}`})}
+      if(err){ return reject({errFrom: 2, errMsg: err})}
       if(ok === 'OK') {
         console.log('REDIS / set完成')
         return resolve(val)

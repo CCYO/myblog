@@ -9,6 +9,7 @@
 
 <body>
   <div>
+    <a href="/login.html">登入</a>
     <h2>文章列表</h2>
     <div id='showBlogList'></div>
   </div>
@@ -61,7 +62,6 @@
                 <p>作者：<a href="/index.html?author=${item.author}">${item.author}</a></p>
             </div>`)
         )
-	console.log(html)
         $('#showBlogList').append(...html)
         return 
     })

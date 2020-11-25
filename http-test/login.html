@@ -20,6 +20,19 @@
     <button id="submit">送出查詢</button>
   </div>
   <script>
+    //驗證登錄狀態
+    const loginCheck = () => {
+      return $.ajax({
+	url: '/api/user/login',
+	method: 'GET'
+      })
+    }
+    loginCheck()
+      .then(result => {
+	if(!result.errno) window.location.href = '/admin.html'
+      })
+
+
     //處理帳密資訊
     const login = () => {
       return $.ajax({
@@ -35,16 +48,14 @@
     $("#submit").click(() => {
       login()
       .then(result => {
-console.log('WTF', result)
+        if(result.msg) console.error(result.msg)
         if(result.errno){
-          if(result.data.dbErrNo === '122'){
-            alert('資料有誤，請重填')
-            $('input').val('')
-          }
-          console.error(result.data.dbErrMsg)
-          return
+          alert('帳密資料有誤，請重填')
+          $('input').val('')
+	  return
         }
-        window.location.href = '/admin.html'        
+        window.location.href = '/admin.html'
+	return
       })
     })
   </script>

@@ -1,6 +1,6 @@
 const { getList, getDetail, newBlog, updateBlog, delBlog } = require('../controller/blog')
 const { SuccessModel, ErrorModel } = require('../model/resModel')
-
+const { handleErr } = require('../db/handleErr')
 const loginCheck = (req) => {
     if(!req.session.username){
         return Promise.resolve(new ErrorModel('尚未登錄'))
@@ -18,22 +18,28 @@ const handleBlogRouter = (req, res) => {
         if(loginCheckResult){
 	  return loginCheckResult
         }
-        return getList(req.session.username).then(listData => new SuccessModel(listData))
+        return getList(req.session.username)
+	  .then(listData => new SuccessModel(listData))
+	  //處理mysql報錯
+	  .catch(handleErr)
       }
       const author = req.query.author || ''
       const keyword = req.query.keyword || ''
-      const result = getList(author, keyword)
-      return result.then(listData => {
+      return getList(author, keyword)
+	.then(listData => {
           return new SuccessModel(listData)
-      })
+        })
+	.catch(handleErr)
   }
    
 
   if(method === "GET" && req.path === "/api/blog/detail"){
       const result = getDetail(id)
-      return result.then(data => {
+      return result
+	.then(data => {
           return new SuccessModel(data)
-      })
+        })
+	.catch(handleErr)
   }
    
 
@@ -42,16 +48,10 @@ const handleBlogRouter = (req, res) => {
     if(loginCheckResult){
         return loginCheckResult
     }
-      req.body.author = req.session.username
-      const result = newBlog(req.body)
-      return result
-		.then(data => {
-			return new SuccessModel(data)
-		})
-		.catch(errResult => {
-			console.log(`報錯,dbErrNo >>> ${errResult.dbErrNo}, dbErrMsg >>> ${errResult.dbErrMsg}`)
-			return new ErrorModel(errResult)
-		})
+    req.body.author = req.session.username
+    return newBlog(req.body)
+      .then(result => new SuccessModel(result.msg))
+      .catch(handleErr)
   }
 
   if(method === "POST" && req.path === "/api/blog/update"){
@@ -60,14 +60,9 @@ const handleBlogRouter = (req, res) => {
             return loginCheckResult
         }
 	
-        const result = updateBlog(req.query.id, req.body)
-        return result.then(val => {
-            if(val){
-                return new SuccessModel()
-            } else {
-                return new ErrorModel('更新Blog失敗')
-            }
-        })
+        return updateBlog(req.query.id, req.body)
+	  .then(result => new SuccessModel(result.msg))
+	  .catch(handleErr)
     }
 
     if(method === 'POST' && req.path === '/api/blog/del'){

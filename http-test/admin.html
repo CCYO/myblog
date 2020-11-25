@@ -35,7 +35,7 @@
 	  html.push(`<div>
             <a href="/detail.html?id=${item.id}">${item.title}</a>|
             <span>${getTime(item.createtime)}</p>
-            <a href="/updateBlog.html?id=${item.id}">update</a>|<a href="/api/blog/delBlog?id=${item.id}'>delete</a>
+            <a href="/updateBlog.html?id=${item.id}">update</a>|<a href="/api/blog/delBlog?id=${item.id}">delete</a>
           </div>`)
         )
         $('#showBlogList').append(...html)

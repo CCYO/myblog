@@ -17,7 +17,7 @@ const exec = (sql) => {
     const promise = new Promise((resolve, reject) => {
         con.query(sql, (err, result) => {
             if(err){ 
-              return reject({dbErrNo: '111', dbErrMsg: err})	
+              return reject({errFrom: '1', errMsg: err})	
             }
             return resolve(result)
         })
