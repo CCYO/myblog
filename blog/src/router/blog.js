@@ -70,15 +70,11 @@ const handleBlogRouter = (req, res) => {
         if(loginCheckResult){
             return loginCheckResult
         }
-        const author = req.session.username
-        const result = delBlog(id, author)
-        return result.then(val => {
-            if(val){
-                return new SuccessModel()
-            } else {
-                return new ErrorModel('刪除Blog失敗')
-            }
-        })
+        req.body.author = req.session.username
+console.log('req.body.id', req.body.id)
+        return delBlog(req.body)
+          .then(result => new SuccessModel(result.msg))
+          .catch(handleErr)
     }
 }
 

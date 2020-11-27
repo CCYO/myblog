@@ -23,6 +23,7 @@
       .then(result => {
         if (result.errno) {
           $('#showBlogList').append(`you have to login`)
+	  window.location.href = '/login.html'
           return
         }
         let data = result.data
@@ -35,12 +36,31 @@
 	  html.push(`<div>
             <a href="/detail.html?id=${item.id}">${item.title}</a>|
             <span>${getTime(item.createtime)}</p>
-            <a href="/updateBlog.html?id=${item.id}">update</a>|<a href="/api/blog/delBlog?id=${item.id}">delete</a>
+            <a href="/updateBlog.html?id=${item.id}">update</a>|<a href="javascript:void(0)" onclick='ajaxDel(${item.id})'>delete</a>
           </div>`)
         )
         $('#showBlogList').append(...html)
         return
       })
+  const ajaxDel = (id) => {
+console.log('run-------------------------------')
+    $.ajax({
+      url: '/api/blog/del',
+      method: 'POST',
+      data: JSON.stringify({id: id}),
+      contentType: 'application/json; charset=utf-8'
+    })
+      .then(result => {
+        if(result.erron){
+	console.log('err------------------------------------')
+	  alert(result.msg) 
+	}
+console.log('succ------------------------------------')
+	alert(result.msg)
+	window.location.href = 'admin.html'
+	return
+      })
+  }    
   </script>
 </body>
 

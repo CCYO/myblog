@@ -62,10 +62,31 @@ const updateBlog = (id, blogData = {}) => {
 
 
 
-const delBlog = (id) => {
-    
+const delBlog = (delData={}) => {
+  const sql_safe = exec('SET SQL_SAFE_UPDATES = 0;')
+  const id = delData.id
+  const author = delData.author
+  return  sql_safe
+    .then(data => {
+      console.log('【controller/blog.js:sql_safe】data >>>>>>>>>>>>>')
+      for(key in data){
+        console.log(`${key} : ${data[key]} |`)
+      }
+    })
+    .then( _ => {
+      const sql = `DELETE FROM blogs WHERE id='${id}' and author='${author}';`
+      return exec(sql)
+        .then(deleteData => {
+          console.log(`【controller/blog.js:delBlog()】deleteData >>>`)
+          for(key in deleteData){
+            console.log(`${key} : ${deleteData[key]} |`)
+          }
+          console.log('<<<<<<<<<<<<<<<<<<<<<<<<<')
+          return {msg: 'delete Blog 成功'}
+        })
+    })
 }
 
 module.exports = {
-    getList, getDetail, newBlog, updateBlog
+    getList, getDetail, newBlog, updateBlog, delBlog
 }
