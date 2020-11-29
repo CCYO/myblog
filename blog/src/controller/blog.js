@@ -1,4 +1,4 @@
-const { exec } = require('../db/mysql')
+const { exec, escape } = require('../db/mysql')
 
 const getList = (author, keyword) => {
     let sql = `SELECT * FROM blogs WHERE 1=1 `
@@ -22,13 +22,13 @@ const getDetail = (id) => {
 }
 
 const newBlog = (blogData = {}) => {
-    const title = blogData.title
-    const content = blogData.content
+    const title = escape(blogData.title)
+    const content = escape(blogData.content)
     const createtime = Date.now()
     const author = blogData.author
           
     let sql = `
-        INSERT INTO blogs (title, content, createtime, author) values('${title}', '${content}', ${createtime}, '${author}');
+        INSERT INTO blogs (title, content, createtime, author) values(${title}, ${content}, ${createtime}, '${author}');
     `
     return exec(sql)
 	.then( insertData => {
@@ -45,7 +45,11 @@ const newBlog = (blogData = {}) => {
 
 
 const updateBlog = (id, blogData = {}) => {
-	const sql = `UPDATE blogs SET title='${blogData.title}', content='${blogData.content}', createtime=${blogData.createtime} where id='${id}';`
+    const title = escape(blogData.title)
+    const content = escape(blogData.content)
+    const createtime = Date.now()
+    const author = blogData.author
+	const sql = `UPDATE blogs SET title=${title}, content=${content}, createtime=${createtime} where author='${author}' and id=${id};`
 	return exec(sql)
 	  //觀察updateData內容
 		.then(updateData => {

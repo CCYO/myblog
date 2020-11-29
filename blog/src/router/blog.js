@@ -59,7 +59,8 @@ const handleBlogRouter = (req, res) => {
         if(loginCheckResult){
             return loginCheckResult
         }
-	
+        req.body.author = req.session.username
+	console.log('>>>>> '+req.body.content+' <<<<<<')
         return updateBlog(req.query.id, req.body)
 	  .then(result => new SuccessModel(result.msg))
 	  .catch(handleErr)
